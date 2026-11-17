@@ -1,0 +1,87 @@
+北京联通/移动 烽火HG6145D/HG6145D1 获取管理员密码 改省份 改桥接 破解 
+
+
+本帖包含两部分内容：
+1、移动/联通 HG6145D/D1破解密码方案，为全国通用方案。此方案收集整理自各位坛友的讨论
+2、联通 HG6145D1改省份方案，为应对北京联通约束CUAdmin账号的方案，同时也可以解决上海等地区最多连接4个设备的问题。此方案我自己瞎试出来的，有一定风险。
+
+
+特别提醒：如果没有NAND编程器，不要随便尝试使用指令修改SN或者MAC、不要刷来路不明的固件升级包！！！大概率出问题！
+
+
+
+
+移动HG6145D/D1：
+0、先尝试CMCCAdmin aDm8H%MdA能否直接登录进去，我手头好几台，较早版本的HG6145D大部分都能直接登录。不行的话再继续试下面的
+1、获取光猫MAC：打开cmd，arp -a 192.168.1.1，查看光猫MAC地址，如aa-bb-cc-dd-ee-ff
+2、开启光猫telnet：http://192.168.1.1/cgi-bin/telnetenable.cgi?telnetenable=1&key=AABBCCDDEEFF  此处填写上面的mac，注意全大写，随后网页提示 telnet启用成功
+3、准备一个带telnet功能的软件如Xshell等，或者启用windows自带的telnet客户端，若不明白请百度～
+4、登录telnet：telnet用户名 admin  密码 Fh@DDEEFF 此处填写MAC的后6位，注意全大写，登录成功后出现#号
+5、进入工厂模式：load_cli factory
+6、显示管理员密码：show admin_pwd
+7、登录管理员帐号：http://192.168.1.1/
+至此，成功。
+
+
+
+联通HG6145D1：
+联通管理比较混乱，根据楼下几位坛友的反馈（南宁/上海等），部分地区可以直接用默认密码登录进去
+
+0、先尝试在http://192.168.1.1/cu.html上能否直接使用CUAdmin或cuadmin登录进去，不行的话再继续试下面的
+1、获取光猫MAC：打开cmd，arp -a 192.168.1.1，查看光猫MAC地址，如aa-bb-cc-dd-ee-ff
+2、开启光猫telnet：http://192.168.1.1/telnet?enable=1&key=AABBCCDDEEFF  此处填写上面的mac，注意全大写，随后网页提示 Open telnet success!
+3、准备一个带telnet功能的软件如Xshell等，或者启用windows自带的telnet，若不明白请百度～
+4、登录telnet：telnet用户名 root  密码 Fh@DDEEFF 此处填写MAC的后6位，注意全大写，登录成功后出现#号
+5、进入工厂模式：load_cli factory
+6、显示管理员密码：show admin_pwd
+7、登录管理员帐号：http://192.168.1.1/cu.html（北京用户跳过此步）
+
+至此，成功。
+如果是北京用户还需要继续切换省份才能登CUAdmin，相关方法如下，有一定风险。
+联通HG6145D1改省份：
+此方案会清除光猫内全部认证信息，请全部理解且做好足够心理准备再继续进行。
+有固定电话、IPTV的用户，不建议操作。（请参阅82、83楼）
+0、用光猫反面写的密码登录http://192.168.1.1
+1、检查一下INTERNET的VLAN ID，北京是3961
+2、记下拨号账号和密码
+3、telnet打指令，进入工厂模式（load_cli factory），然后切换省份至河北（load preconfig Hebei），等几秒就完事，然后重启，不推荐断电重启，尽量在网页上点重启
+4、http://192.168.1.1/cu.html，密码为cuadmin（全小写）（如果不对，可以按照上面的方法重新获取一次密码）
+5、删除原有的TR069，添加一项INTERNET，桥接/路由根据需要选择，VLAN ID填写3961。
+（使用路由模式可能会发现一开网页，光猫自动重定向到注册下发页面，这种情况要么想办法解决重定向，要么把TR069按照原来的信息添加回来操作一遍业务下发（LOID=SN或MAC，无密码））
+至此，成功。
+注1：不同省份的配置不同，如河北版本限制连接设备数10个，上海版本限制连接设备数4个，北京版本限制连接设备数253个，等等乱七八糟的。
+最后一个Trunk版本我着似乎啥限制都没有，各位有兴趣可自行尝试。
+注2：如果失败了，想恢复原来的样子，那就改回Beijing，然后注册页面LOID填写光猫SN（GPON猫）或MAC（EPON猫），密码空着或者000000，点下发等跑进度条。
+
+
+
+修改sn
+
+命令参考
+1，进入工厂模式 load_cli factory
+2，打开允许修改 set factorymode enable
+3，修改gpon_sn set gpon_sn <gponsn>
+修改device_sn  set device_sn <gponsn>
+
+
+修改gpon_sn后，光猫设备sn仍是老的sn,
+由于没有上机测试，不知道能不能注册成功，所以把device_sn也一起改了，
+可能只需要改其中一个就行了，有换机的可以试试只需要改哪一个。
+
+4，关闭允许修改 set factorymode disable
+
+
+telnet密码仍然是 Fh@+光猫原来的MAC后6位
+
+我尝试修改成功，但没有插上光纤更换测试。
+
+
+
+
+获取超级管理员帐号/密码
+      3.1 获取帐号：show admin_name
+      3.2 获取超密：show admin_pwd
+
+输入以下命令切换省份(改省份可跳过第3步)
+      4.1 例如：load preconfig 省份的拼音
+      4.2 广东：load preconfig Guangdong
