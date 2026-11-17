@@ -57,6 +57,12 @@ fe93ba5d2d93fec9c07259855cc1b42009d13449be9a34e7ed6761ec1657adeb  docs/HG6145D�
 
 `multi_image_nvram0x2.bin` 是英文版整机镜像，元数据里 `FIRMWARE_VERSION=0`、`PACKAGE_ID=fnt-HGW`，属于产线和维修用的裸包，不是网页升级能用的格式。刷写要用 `MUT_eng.exe` 走组播，多台并联；包里只有一个英文版镜像，**没有回退到中文版的包**。
 
+## 相关仓库
+
+同品牌其它机型，命令体系或刷机思路相近，排障时可以互相参照；每个仓库开头都对应一篇文章：
+
+- [烽火 HG5140A 工具包](https://github.com/dellzou/FH_HG5140A_Flashing_Software_and_Tutorial)：10G-EPON 开 Telnet 与一键改区
+
 ## 免责声明
 
 工具与固件均来自公开维修资料，仅供自有设备维修与学习使用。刷机、改 SN/MAC、改省份都有变砖和断网风险，操作前先备份，后果自负。仓库不含任何真实设备的配置备份。
